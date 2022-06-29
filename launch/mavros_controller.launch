@@ -1,0 +1,5 @@
+<launch>
+    <node name="mavros_cmd_arm" pkg="mavros_command" type="arm"/>
+    <node name="mavros_cmd_land" pkg="mavros_command" type="land"/>
+    <node name="mavros_cmd_takeoff" pkg="mavros_command" type="takeoff"/>
+</launch>
