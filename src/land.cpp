@@ -42,12 +42,8 @@ void Land :: cmdLand(){
     srv_msg.request.latitude = 0;
     srv_msg.request.longitude = 0;
     srv_msg.request.altitude = 0;
-    if(mavros_srv.call(srv_msg)){
-        ROS_INFO("Land success");
-    }
-    else{
-        ROS_INFO("Land success");
-    }
+    if(mavros_srv.call(srv_msg)){ return; }
+    else{ ROS_INFO("Error"); }
     return;
 }
 
@@ -58,18 +54,18 @@ int main(int argc, char **argv){
     int tmp = 0;
     while(ros::ok()){
         if(mavros_land.action_land.is_active() && mavros_land.action_land.active_has_changed()){
+            ROS_INFO("Action: Land activiate");
+        }
+        if(mavros_land.action_land.active_has_changed() && !(mavros_land.action_land.is_active())){
+            ROS_INFO("done");
+            mavros_land.actionSet(1);
+        }
+        if(mavros_land.action_land.is_active()){
             mavros_land.actionSet(0);
             mavros_land.cmdLand();
-            mavros_land.actionSet(1);
+            // ros::Duration(0.5).sleep(); 
         }
         ros::spinOnce();
     }
     return 0;
-    // Takeoff mavros;
-    // mavros.cmd_takeoff()
-    // ros::spin();
-    // rosservice call mavros/cmd/takeoff  0 0 0 0 15
-    // rosservice call mavros/cmd/arming True
-    // rosservice call mavros/cmd/land 0 0 0 0 0
-
 }

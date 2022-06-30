@@ -58,11 +58,11 @@ void Takeoff :: cmdTakeoff(){
 }
 
 void Takeoff :: positionCallback(const geometry_msgs::PoseStamped::ConstPtr& msg){
-    if(abs(desired_height - msg->pose.position.z) < margin){
-        actionSet(1);
-    }else{
-        actionSet(0);
-    }
+    // if(abs(desired_height - msg->pose.position.z) < margin){
+    //     actionSet(1);
+    // }else{
+    //     actionSet(0);
+    // }
     return;
 }
 
@@ -73,7 +73,17 @@ int main(int argc, char **argv){
     int tmp = 0;
     while(ros::ok()){
         if(mavros_takeoff.action_takeoff.is_active() && mavros_takeoff.action_takeoff.active_has_changed()){
+            ROS_INFO("Action: Takeoff activiate");
             mavros_takeoff.cmdTakeoff();
+        }
+        if(mavros_takeoff.action_takeoff.active_has_changed() && !(mavros_takeoff.action_takeoff.is_active())){
+            ROS_INFO("done");
+            mavros_takeoff.actionSet(1);
+        }
+        if(mavros_takeoff.action_takeoff.is_active()){
+            mavros_takeoff.actionSet(0);
+            // mavros_takeoff.cmdTakeoff();
+            // ros::Duration(0.5).sleep(); 
         }
         ros::spinOnce();
     }

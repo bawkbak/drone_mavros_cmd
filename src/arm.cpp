@@ -40,12 +40,8 @@ void Arm :: actionSet(int state){
 void Arm :: cmdArming(){
     mavros_msgs::CommandBool srv_msg;
     srv_msg.request.value = true;
-    if(mavros_srv.call(srv_msg)){
-        ROS_INFO("Arm success");
-    }
-    else{
-        ROS_INFO("Arm failed");
-    }
+    if(mavros_srv.call(srv_msg)){ return; }
+    else{ ROS_INFO("Error"); }
     return;
 }
 
@@ -54,9 +50,16 @@ int main(int argc, char **argv){
     Arm mavros_arm;
     while(ros::ok()){
         if(mavros_arm.action_arm.is_active() && mavros_arm.action_arm.active_has_changed()){
+            ROS_INFO("Action: Arm activiate");
+        }
+        if(mavros_arm.action_arm.active_has_changed() && !(mavros_arm.action_arm.is_active())){
+            ROS_INFO("Action: Done");
+            mavros_arm.actionSet(1);
+        }
+        if(mavros_arm.action_arm.is_active()){
             mavros_arm.actionSet(0);
             mavros_arm.cmdArming();
-            mavros_arm.actionSet(1);
+            //ros::Duration(0.5).sleep(); 
         }
         ros::spinOnce();
     }
