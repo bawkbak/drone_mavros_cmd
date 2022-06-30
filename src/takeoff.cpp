@@ -11,18 +11,15 @@ class Takeoff{
         ros::NodeHandle n;
         ros::ServiceClient mavros_srv;
         ros::Subscriber msg_sub_pose;
-        float desired_height = 15.0;
-        float margin = 0.5;
+        float desired_height = 0;
     public: 
         bt::Action action_takeoff;
         Takeoff();
         void actionSet(int state);
         void cmdTakeoff();
-        void positionCallback(const geometry_msgs::PoseStamped::ConstPtr& msg);
 };
 Takeoff :: Takeoff() : action_takeoff("Takeoff"){
     mavros_srv = n.serviceClient<mavros_msgs::CommandTOL>("mavros/cmd/takeoff");
-    msg_sub_pose = n.subscribe("mavros/local_position/pose", 1,  &Takeoff::positionCallback, this);
 }
 
 void Takeoff :: actionSet(int state){
@@ -42,6 +39,7 @@ void Takeoff :: actionSet(int state){
 }
 void Takeoff :: cmdTakeoff(){
     mavros_msgs::CommandTOL srv_msg;
+    n.getParam("drone/desired_height", desired_height);
     srv_msg.request.min_pitch = 0;
     srv_msg.request.yaw = 0;
     srv_msg.request.latitude = 0;
@@ -57,14 +55,6 @@ void Takeoff :: cmdTakeoff(){
     return;
 }
 
-void Takeoff :: positionCallback(const geometry_msgs::PoseStamped::ConstPtr& msg){
-    // if(abs(desired_height - msg->pose.position.z) < margin){
-    //     actionSet(1);
-    // }else{
-    //     actionSet(0);
-    // }
-    return;
-}
 
 
 int main(int argc, char **argv){
@@ -82,8 +72,6 @@ int main(int argc, char **argv){
         }
         if(mavros_takeoff.action_takeoff.is_active()){
             mavros_takeoff.actionSet(0);
-            // mavros_takeoff.cmdTakeoff();
-            // ros::Duration(0.5).sleep(); 
         }
         ros::spinOnce();
     }
