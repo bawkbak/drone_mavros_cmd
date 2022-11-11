@@ -16,7 +16,7 @@ class Land{
         void actionSet(int state);
         void cmdLand();
 };
-Land :: Land() : action_land("Land"){
+Land :: Land() : action_land("action_land"){
     mavros_srv = n.serviceClient<mavros_msgs::CommandTOL>("mavros/cmd/land");
 }
 

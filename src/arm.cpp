@@ -17,7 +17,7 @@ class Arm{
         void cmdArming();
 };
 
-Arm :: Arm() : action_arm("Arm"){
+Arm :: Arm() : action_arm("action_arm"){
     mavros_srv = n.serviceClient<mavros_msgs::CommandBool>("mavros/cmd/arming");
 }
 
