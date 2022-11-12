@@ -130,10 +130,12 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 add_executable(takeoff src/takeoff.cpp)
 add_executable(land src/land.cpp)
 add_executable(arm src/arm.cpp)
+add_executable(report_gps src/report_gps.cpp)
 
 target_link_libraries(takeoff ${catkin_LIBRARIES})
 target_link_libraries(land ${catkin_LIBRARIES})
 target_link_libraries(arm ${catkin_LIBRARIES})
+target_link_libraries(report_gps ${catkin_LIBRARIES})
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
