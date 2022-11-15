@@ -1,0 +1,12 @@
+<launch>
+    <node pkg="mavros_command" type="report_gps" name="report_gps" clear_params="true" output="screen"/>
+
+    <node pkg="behavior_tree_extra" type="signal_square_buffer" name="report_gps_finished" clear_params="true" output="screen">
+        <!-- <remap from="waypoint/state" to="report_gps_active"/> -->
+        <remap from="state_manager/reset" to="state_manager/reset_report_gps"/>
+    </node>
+
+    <node pkg="behavior_tree_extra" type="buffer_reset" name="report_gps_reset" clear_params="true" output="screen">
+        <remap from="state_manager/reset" to="state_manager/reset_report_gps"/>
+    </node>
+</launch>

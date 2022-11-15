@@ -17,7 +17,7 @@ class GPS{
         void reportGPS();
 };
 GPS :: GPS() : action("report_gps"){
-    sub_gps = n.subscriber("mavros/global_position/global", 1,  &GPS::stateCallback, this);
+    sub_gps = n.subscribe("mavros/global_position/global", 1,  &GPS::stateCallback, this);
 }
 
 void GPS :: stateCallback(const sensor_msgs::NavSatFix::ConstPtr& msg){
@@ -54,15 +54,17 @@ int main(int argc, char **argv){
     int tmp = 0;
     while(ros::ok()){
         if(report.action.is_active() && report.action.active_has_changed()){
-            // ROS_INFO("Action: GPS activiate");
+            ROS_INFO("Action: GPS report");
+            report.reportGPS();
+            
         }
         if(report.action.active_has_changed() && !(report.action.is_active())){
-            // ROS_INFO("done");
+            ROS_INFO("done");
             report.actionSet(1);
         }
         if(report.action.is_active()){
             report.actionSet(0);
-            report.reportGPS();
+            
             // ros::Duration(0.5).sleep(); 
         }
         ros::spinOnce();

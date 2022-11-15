@@ -1,5 +1,6 @@
 <launch>
-    <node name="mavros_cmd_arm" pkg="mavros_command" type="arm"/>
-    <node name="mavros_cmd_land" pkg="mavros_command" type="land"/>
-    <!-- <node name="mavros_cmd_takeoff" pkg="mavros_command" type="takeoff"/> -->
+    <node pkg="mavros_command" type="arm" name="mavros_cmd_arm"/>
+    <node pkg="mavros_command" type="land" name="mavros_cmd_land"/>
+    <node pkg="mavros_command" type="hold" name="mavros_cmd_hold"/>
+    <node pkg="mavros_command" type="offboard" name="mavros_cmd_offboard"/>
 </launch>
